@@ -1,17 +1,12 @@
-FROM node:22 as builder
-ENV NODE_ENV="production"
-
-COPY . /app
-
-WORKDIR /app
-
-RUN npm install
-
 FROM node:22
 ENV NODE_ENV="production"
-COPY --from=builder /app /app
+
 WORKDIR /app
-ENV PORT 3000
+COPY package*.json ./
+RUN npm install --only=production
+COPY . .
+
 EXPOSE 3000
 
-CMD ["node", "main.js"]
+CMD npx wait-port mysql-user:3306 && \
+    npm start

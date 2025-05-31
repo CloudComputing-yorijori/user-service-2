@@ -128,21 +128,27 @@ module.exports = {
         try {
             //내가 연 펀딩 목록 불러오기 
             let userId = res.locals.currentUser.getDataValue('userId');
-            let query = `
-                        SELECT fg.representativeUserId, fg.fundingDate, fp.productName, fg.people, fp.imageUrl
-                        FROM fundingGroups AS fg
-                        INNER JOIN fundingProducts AS fp ON fg.fundingProductId = fp.fundingProductId
-                        where fg.representativeUserId = ${userId};
-            `;
-            let [myposts, metadata] = await sequelize.query(query, { type: Sequelize.SELECT });
-            
-            // 날짜 출력 조정 
-            myposts.forEach(post => {
-                const date = new Date(post.fundingDate);
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
-                post.fundingDate = date.toLocaleDateString('en-US', options);
-            });
+            const fundingServiceUrl = `http://funding-service:3001/funding`;
+            let myposts = [];
 
+            try {
+                const response = await axios.get(fundingServiceUrl, {
+                    headers: {
+                        Cookie: req.headers.cookie // 세션 전달
+                    },
+                    withCredentials: true
+                });
+                myposts = response.data;
+
+                // 날짜 출력 조정 
+                myposts.forEach(post => {
+                    const date = new Date(post.fundingDate);
+                    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                    post.fundingDate = date.toLocaleDateString('en-US', options);
+                });
+            } catch (err) {
+                console.error('[FundingService Error]', err.message);
+            }
             //팝업에 닉네임이랑 프로필 뜨게 
             let query2 = `
                  SELECT nickname, imageUrl
@@ -157,6 +163,7 @@ module.exports = {
             res.status(500).send({ message: error.message });
             console.error(`Error: ${error.message}`);
         }
+        
     },
 
     //마이페이지(참여한 펀딩보기)
@@ -164,20 +171,22 @@ module.exports = {
         try {
             //참여한 펀딩 불러오기 
             let userId = res.locals.currentUser.getDataValue('userId');
-            let query = `
-                        SELECT cp.userId, cp.fundingGroupId, fg.fundingDate, fg.people, fp.productName, fp.imageUrl
-                        FROM compositions AS cp
-                        INNER JOIN fundingGroups AS fg ON cp.fundingGroupId = fg.fundingGroupId
-                        INNER JOIN fundingProducts AS fp ON fg.fundingProductId = fp.fundingProductId
-                        where cp.userId = ${userId};
-            `;
-            let [myposts, metadata] = await sequelize.query(query, { type: Sequelize.SELECT });
+            
+            // 공동구매 서비스에 요청
+            const response = await axios.get(`http://funding-service:3000/fundings/participated`, {
+                headers: {
+                  Cookie: req.headers.cookie // 현재 요청의 쿠키를 그대로 전달
+                },
+                withCredentials: true
+              });
 
-            // 날짜 출력 조정 
+            let myposts = response.data;
+
+                // 날짜 출력 조정
             myposts.forEach(post => {
-                const date = new Date(post.fundingDate);
+                const date = new Date(post.fundingGroup.fundingDate);
                 const options = { year: 'numeric', month: 'long', day: 'numeric' };
-                post.fundingDate = date.toLocaleDateString('en-US', options);
+                post.fundingGroup.fundingDate = date.toLocaleDateString('en-US', options);
             });
 
             //팝업에 닉네임이랑 프로필 뜨게 

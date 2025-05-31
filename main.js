@@ -10,17 +10,17 @@ layouts = require("express-ejs-layouts"),
     FileStore = require('session-file-store')(session);
 
     db.sequelize.sync({});
-    const User = db.user;
+const User = db.user;
+const axios = require('axios');
 
 multer = require('multer'),
 multerGoogleStorage = require('multer-google-storage'),
 cors = require('cors');
 
-//성공해서 자고 싶어요
-
 // core 오류 방지 설정
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:3001',
+    credentials: true
     
 }));
     
@@ -60,14 +60,34 @@ app.use(express.static('public')); // 정적 파일 사용
 
 app.use(flash());
 
-// 세션 설정
-app.use(session({
-    secret: 'yorijori_secret_key',
-    resave: false,
-    saveUninitialized: true,
-    store: new FileStore()
-}));
+// Redis 관련 모듈 추가
+const Redis = require("redis");
+const { RedisStore } = require("connect-redis");
 
+// Redis 클라이언트 생성
+const redisClient = Redis.createClient({
+    legacyMode: true, // Redis v4를 사용하는 경우, connect-redis 호환을 위해 legacy 모드 설정
+    url: "redis://redis:6379", // 실제 Redis 서버 컨테이너와 일치해야 됨
+  });
+  redisClient.connect().catch(console.error);
+  
+ 
+// 세션 설정 (RedisStore 사용)
+app.use(
+    session({
+        name: 'connect.sid', // 쿠키 이름 명시
+        store: new RedisStore({ client: redisClient }),
+        secret: "yorijori_secret_key",
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            secure: false,
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 24,
+            domain: "yorijori.com" //Ingress의 호스트명과 정확히 일치시켜야 함
+        }
+    })
+);
 //플래시 메시지 미들웨어 설정
 // app.use(flash());
 
@@ -100,39 +120,21 @@ app.use((req, res, next) => {
     next();
 });
 
-// Router
-//const homeRouter = require("./routers/homeRouter.js")
-//const postRouter = require("./routers/postRouter.js")
-//const joinFundingRouter = require("./routers/joinFundingRouter.js")
-//const writeRouter = require("./routers/writeRouter.js")
-//const searchRouter = require("./routers/searchRouter.js")
-//const createFundingRouter = require("./routers/createFundingRouter.js")
+app.use('/auth/assets', express.static(path.join(__dirname, 'public/assets')));
+
 const authRouter = require("./routers/authRouter");
-
-const testRouter = require('./routers/testRouter');
-app.use('/api', testRouter);
-
-const imageRouter = require('./routers/imageRouter');
-app.use('/api', imageRouter);
-
-const fundingRouter = require('./routers/fundingRouter');
-app.use('/api', fundingRouter);
-
-
-// home 접근
-//app.use("/", homeRouter);
-// search 접근
-//app.use("/search", searchRouter);
-// post 접근
-//app.use("/posts", postRouter);
-//write 접근
-//app.use("/write", writeRouter);
 // 로그인 및 사용자 관리 접근
 app.use("/auth", authRouter);
-// createFundingRouter 접근
-//app.use("/createfundingPage", createFundingRouter);
-// joinFundingRouter 접근
-//app.use("/joinfundingPage", joinFundingRouter);
+
+// const testRouter = require('./routers/testRouter');
+// app.use('/api', testRouter);
+
+// const imageRouter = require('./routers/imageRouter');
+// app.use('/image', imageRouter);
+
+// const fundingRouter = require('./routers/fundingRouter');
+// app.use('/funding', fundingRouter);
+
 
 
 //플래시 메시지 미들웨어 설정
@@ -144,7 +146,7 @@ app.use("/auth", authRouter);
 // app.use('/auth', authRouter);
 
 // 서버 실행
-app.set("port", 8080);
+app.set("port", 3000);
 app.listen(app.get("port"), "0.0.0.0", () => {
     console.log(`Server running at http://localhost:${app.get("port")}`);
 });

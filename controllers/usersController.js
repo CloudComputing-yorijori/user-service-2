@@ -31,12 +31,33 @@ module.exports = {
     },
 
     //로그인 진행 
-    authenticate: passport.authenticate("local", {
-        successRedirect: "/",
-        successFlash: "로그인 성공",
-        failureRedirect: "/auth/login",
-        failureFlash: "로그인 실패"
-    }),
+    authenticate: (req, res, next) => {
+        passport.authenticate("local", (err, user, info) => {
+          if (err) return next(err);
+          if (!user) {
+            req.flash("error", "로그인 실패");
+            return res.redirect("/auth/login");
+          }
+    
+          req.logIn(user, (err) => {
+            if (err) return next(err);
+    
+            // 세션에 유저 정보 저장
+            req.session.user = {
+                userId: user.userId,
+                nickname: user.nickname,
+                imageUrl: user.imageUrl,
+                phoneNumber: user.phoneNumber,
+                district: user.district
+              };
+            
+    
+            req.flash("success", "로그인 성공");
+            return res.redirect("/");
+          });
+        })(req, res, next);
+      },
+    
 
     //로그아웃 진행 
     logout: (req, res, next) => {
