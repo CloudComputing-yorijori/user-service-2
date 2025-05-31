@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>요리조리_마이페이지</title>
+    <link rel="stylesheet" href="/css/auth/mypage_participatedfunding.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="inincontainer">
+            <div class="mypage-main">마이페이지 > 내가 참여한 펀딩</div>
+            <div class="incontainer">
+                <div class="menu-bar">
+                    <div class="menu-bar-option">
+                        <a href="mypage">나의 레시피</a>
+                    </div>
+                    <div class="menu-bar-option">
+                        <a href="mypageComment">댓글</a>
+                    </div>
+                    <div class="menu-bar-option">
+                        <a href="mypageScrap">스크랩</a>
+                    </div>
+                    <hr class="custom-hr">
+                    <div class="menu-bar-option">
+                        <p>펀딩</p>
+                    </div>
+                    <div class="menu-bar-option">
+                        <a href="mypageMyFunding">내가 연 펀딩</a>
+                    </div>
+                    <div class="menu-bar-option">
+                        <a href="mypageParticipatedFunding">내가 참여한 펀딩</a>
+                    </div>
+                    <hr class="custom-hr">
+                    <div class="myprofile">
+                        <div class="profileimage">
+                            <img src="<%= result.imageUrl %>" alt="profileImage" class="img">
+                        </div>
+                        <div class="Nickname">
+                            <%= result.nickname %>
+                        </div>
+                        <div class="buttonbox">
+                            <button class="btn-block" type="button" onclick="showPopup()">편집</button>
+                        </div>
+                        <div class="buttonbox">
+                            <a href="/auth/logout">
+                                <button class="btn-block" type="button">로그아웃</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="mainbox">
+                    <%if (Object.keys(posts).length>0) { %>
+                        <% posts.forEach(post=> { %>
+                            <div class="mypost">
+                                <div class="img-box">
+                                    <img src="<%= post.imageUrl %>" alt="productImage" class="img">
+                                  </div>
+                                <h2>
+                                    <%= post.productName %>
+                                    <p>기간: <%=post.fundingDate %></p> 
+                                    <p>참여인원: <%= post.people %>명</p>
+                                </h2>
+                                
+                                <div class="cancleFunding">
+                                        <button class="btn-block" id="btn1" onclick="showPopup2()" type="button">펀딩 취소하기</button>
+                                </div>
+                                
+                                <div class="popup2" id="popup2">
+                                    <p id ="pp">펀딩 참여를 취소하시겠습니까?</p>
+                                        <a href="/joinFundingPage/cancleFunding/<%= post.fundingGroupId%>">
+                                            <button type="button" onclick="closePopup()" id="popupButton">예</button>
+                                        </a>
+                                        <button type="button" onclick="closePopup()" id="popupButton">아니오</button>
+                                </div>
+                            </div>
+                        <% })} else{ %>
+                            <p>참여한 펀딩이 아직 없습니다.</p>
+                        <% }%>
+                </div>
+
+            </div>
+            </div>
+        </div>
+        
+
+
+
+        <!-- 팝업 배경 -->
+        <div class="popup-bg" id="popup-bg" onclick="closePopup()"></div>
+
+        <!-- 팝업 내용 -->
+        <div class="popup" id="popup">
+            <h2>프로필 편집</h2>
+            <form class="form-signin" action="/auth/<%= userId %>/update" method="POST" enctype="multipart/form-data">
+                <div class="profileimage2">
+                    <img src="<%= result.imageUrl %>" alt="profileImage" class="img">
+                </div>
+                <div class="input-container">
+                    <label for="inputChangeNickName" class="sr-only">닉네임 변경</label>
+                    <input type="text" name="nickname" id="inputChangeNickName" class="form-control" placeholder="변경할 닉네임" autofocus required>
+                </div>
+                <div class="input-container-three">
+                    <label for="inputDetailAddress" class="sr-only">주소 변경</label>
+                    <input type="text" name="city" id="inputAddress1" class="form-control2" placeholder="시도" autofocus>
+                    <input type="text" name="district" id="inputAddress2" class="form-control2" placeholder="시군구" autofocus>
+                    <input type="text" name="town" id="inputAddress3" class="form-control2" placeholder="읍면동" autofocus>
+                </div>
+                <div class="input-container">
+                    <input type="text" name="detail" id="inputDetailAddress" class="form-control" placeholder="상세주소" autofocus required>
+                </div>
+                <div class="input-container">
+                    <label for="profileImage" class="sr-only">프로필 이미지 변경</label>
+                    <input type="file" name="profileImage" id="profileImage" class="form-control">
+                </div>
+                <button type="button" onclick="closePopup()" id="popupButton">취소</button>
+                <button type="submit" id="popupButton">저장</button>
+            </form>
+        </div>
+    </div>
+
+        <script>
+            function showPopup() {
+                document.getElementById('popup').style.display = 'block';
+                document.getElementById('popup-bg').style.display = 'block';
+            }
+
+            function closePopup() {
+                document.getElementById('popup').style.display = 'none';
+                document.getElementById('popup-bg').style.display = 'none';
+            }
+        </script>
+
+        <script>
+            function showPopup2() {
+                document.getElementById('popup2').style.display = 'block';
+                document.getElementById('popup-bg').style.display = 'block';
+            }
+
+            function closePopup() {
+                document.getElementById('popup2').style.display = 'none';
+                document.getElementById('popup-bg').style.display = 'none';
+            }
+        </script>
+</body>
+
+</html>

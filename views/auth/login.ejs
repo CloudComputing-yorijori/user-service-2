@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/css/auth/login.css">
+    <title>요리조리_로그인</title>
+</head>
+<body>
+    <div class="container">
+        <div class="incontainer">
+            <div class="login-page">로그인</div> 
+
+            <form class="form-signin" action="/auth/login" method="POST">
+                <div class="input-container">
+                    <label for="inputEmail" class="sr-only">Email</label>
+                    <input type="text" name="email" id="inputEmail" class="form-control" placeholder="이메일" autofocus required>
+                </div>
+
+                <div class="input-container">
+                    <label for="inputPassword" class="sr-only">Password</label> 
+                    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="비밀번호" required>
+                </div>
+
+                <div class="buttonbox">
+                    <button class="btn-block" type="submit">로그인</button>
+                </div>
+                
+            </form>
+
+ 
+                <div class="lose_pwd"><a href="/auth/editpwd" style="text-decoration: underline;">비밀번호를 잊었다면?</a></div>
+
+
+                <div class="buttonbox">
+                    <a href="/auth/newuser">
+                        <button class="btn-block" id="btn1" type="button">회원가입</button>
+                    </a>
+                </div>
+
+        </div>
+    </div>
+</body>
+</html>

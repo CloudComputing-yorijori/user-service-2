@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/css/auth/editpwd.css">
+        <title>요리조리_비밀번호 변경</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="incontainer">
+                <div class="editpwd-page">비밀번호 변경</div>
+                
+                <form class="form-signin" action="/auth/updatepwd" method="POST">
+                    <div class="input-container">
+                        <label for="inputEmail" class="sr-only">이메일 입력</label>
+                        <input type="text" name="email" id="inputEmail" class="form-control" placeholder="이메일 입력" autofocus required>
+                    </div>
+                    <div class="input-container">
+                        <label for="inputNewPwd" class="sr-only">새로운 비밀번호</label>
+                        <input type="password" name="newPwd" id="inputNewPwd" class="form-control" placeholder="새로운 비밀번호" required>
+                    </div> 
+                    <div class="input-container">
+                        <label for="inputNewPwdCheck" class="sr-only">새로운 비밀번호 확인</label>
+                        <input type="password" name="newPwdCheck" id="inputNewPwdCheck" class="form-control" placeholder="새로운 비밀번호 확인" required>
+                    </div>
+                    
+                    <div class="buttonbox">
+                        <button class="btn-block" type="submit">비밀번호 변경하기</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </body>
+</html>

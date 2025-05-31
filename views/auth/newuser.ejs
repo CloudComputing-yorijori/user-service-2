@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/css/auth/newuser.css"/>
+        <title>요리조리_회원가입</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="intcontainer">
+                <div class="signin-page">회원가입</div> 
+        
+                <div class="data-form">
+                    <form class="form-signin" action="/auth/newuser/create" method="POST">
+                        <div class="input-container">
+                            <label for="inputName" class="sr-only">Name</label>
+                            <input type="text" name="name" id="inputName" class="form-control" placeholder="이름" autofocus required>
+                        </div>
+                        <div class="input-container">
+                            <label for="inputNickName" class="sr-only">Nickname</label>
+                            <input type="text" name="nickname" id="inputNickName" class="form-control" placeholder="별명"  required>
+                        </div>
+                        <div class="input-container">
+                            <label for="inputEmail" class="sr-only">Email</label>
+                            <input type="text" name="email" id="inputEmail" class="form-control" placeholder="이메일"  required>
+                        </div>
+                        <div class="input-container">
+                            <label for="inputPhoneNum" class="sr-only">PhoneNumber</label>
+                            <input type="text" name="phoneNumber" id="inputPhoneNum" class="form-control" placeholder="휴대폰번호"  required>
+                        </div>
+                        
+                        <div class="signin-address">주소</div> 
+
+                        <div class="input-container-three">
+                            <input type="text" name="city" id="inputAddress1" class="form-control2" placeholder="시도"  required>
+                            <input type="text" name="district" id="inputAddress2" class="form-control2" placeholder="시군구"  required>
+                            <input type="text" name="town" id="inputAddress3" class="form-control2" placeholder="읍면동"  required>
+                        </div>
+                        <div class="input-container">
+                            <label for="inputDetailAddress" class="sr-only">Detailaddress</label>
+                            <input type="text" name="detail" id="inputDetailAddress" class="form-control" placeholder="상세주소"  required>
+                        </div>
+                        <div class="input-container">
+                            <label for="inputPassword" class="sr-only">Password</label> 
+                            <input type="password" name="password" id="inputPassword" class="form-control" placeholder="비밀번호"  required>
+                        </div>
+                        <div class="input-container">
+                            <label for="inputPwdCheck" class="sr-only">비밀번호 확인</label>
+                            <input type="password" name="PwdCheck" id="inputPwdCheck" class="form-control" placeholder="비밀번호 확인"  required>
+                        </div>
+                        <div class="buttonbox">
+                            <button class="btn-block" type="submit">회원가입</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="gotologin">
+                    <div class="check_account" style="float: left;">이미 계정이 있나요? </div>
+                    <div class="go_login" style="float: left;"><a href="/auth/login" style="text-decoration: underline;">로그인하기</a></div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
