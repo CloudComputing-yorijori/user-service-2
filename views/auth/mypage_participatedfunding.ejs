@@ -56,25 +56,13 @@
                         <% posts.forEach(post=> { %>
                             <div class="mypost">
                                 <div class="img-box">
-                                    <img src="<%= post.imageUrl %>" alt="productImage" class="img">
-                                  </div>
+                                    <img src="<%= post.fundingGroup.fundingProduct.imageUrl %>" alt="productImage" class="img">
+                                </div>
                                 <h2>
-                                    <%= post.productName %>
-                                    <p>기간: <%=post.fundingDate %></p> 
-                                    <p>참여인원: <%= post.people %>명</p>
+                                    <%= post.fundingGroup.fundingProduct.productName %>
+                                    <p>기간: <%= post.fundingGroup.fundingDate %></p> 
+                                    <p>최대 참여인원: <%= post.fundingGroup.people %>명</p>
                                 </h2>
-                                
-                                <div class="cancleFunding">
-                                        <button class="btn-block" id="btn1" onclick="showPopup2()" type="button">펀딩 취소하기</button>
-                                </div>
-                                
-                                <div class="popup2" id="popup2">
-                                    <p id ="pp">펀딩 참여를 취소하시겠습니까?</p>
-                                        <a href="/joinFundingPage/cancleFunding/<%= post.fundingGroupId%>">
-                                            <button type="button" onclick="closePopup()" id="popupButton">예</button>
-                                        </a>
-                                        <button type="button" onclick="closePopup()" id="popupButton">아니오</button>
-                                </div>
                             </div>
                         <% })} else{ %>
                             <p>참여한 펀딩이 아직 없습니다.</p>

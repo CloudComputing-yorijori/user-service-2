@@ -17,11 +17,9 @@ multer = require('multer'),
 multerGoogleStorage = require('multer-google-storage'),
 cors = require('cors');
 
-// core 오류 방지 설정
 app.use(cors({
-    origin: 'http://localhost:3001',
-    credentials: true
-    
+  origin: ['https://user.yorijori.com', 'https://funding.yorijori.com'],
+  credentials: true
 }));
     
 //bodyParser 추가
@@ -74,19 +72,20 @@ const redisClient = Redis.createClient({
  
 // 세션 설정 (RedisStore 사용)
 app.use(
-    session({
-        name: 'connect.sid', // 쿠키 이름 명시
-        store: new RedisStore({ client: redisClient }),
-        secret: "yorijori_secret_key",
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            secure: false,
-            httpOnly: true,
-            maxAge: 1000 * 60 * 60 * 24,
-            domain: "yorijori.com" //Ingress의 호스트명과 정확히 일치시켜야 함
-        }
-    })
+  session({
+      name: 'connect.sid', // 유저 서비스와 동일한 이름
+      store: new RedisStore({ client: redisClient }),
+      secret: "yorijori_secret_key",
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+          secure: false,  
+          httpOnly: true,  // JS 접근 차단 (보안)
+          maxAge: 1000 * 60 * 60 * 24,
+          sameSite: 'lax', 
+          domain: ".yorijori.com" // 도메인 일치
+      }
+  })
 );
 //플래시 메시지 미들웨어 설정
 // app.use(flash());
@@ -120,7 +119,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/auth/assets', express.static(path.join(__dirname, 'public/assets')));
+app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
 
 const authRouter = require("./routers/authRouter");
 // 로그인 및 사용자 관리 접근
