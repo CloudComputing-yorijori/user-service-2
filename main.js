@@ -115,6 +115,9 @@ app.use('/api', testRouter);
 const imageRouter = require('./routers/imageRouter');
 app.use('/api', imageRouter);
 
+const fundingRouter = require('./routers/fundingRouter');
+app.use('/api', fundingRouter);
+
 
 // home 접근
 //app.use("/", homeRouter);
