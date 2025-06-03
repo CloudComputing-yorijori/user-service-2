@@ -30,11 +30,15 @@ spec:
       containers:
       - name: mysql
         image: mysql:5.7
+        args:
+          - "--character-set-server=utf8mb4"
+          - "--collation-server=utf8mb4_unicode_ci"
+          - "--init-connect=SET NAMES utf8mb4"
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: db-credentials
+              name: user-db-credentials
               key: DB_PASS
         - name: MYSQL_DATABASE      
           value: user 

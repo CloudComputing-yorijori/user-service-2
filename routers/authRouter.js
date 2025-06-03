@@ -27,4 +27,5 @@ router.get("/mypageComment", myPageController.mypageComment);
 router.get("/myPageMyFunding", myPageController.mypageMyFunding);
 router.get("/mypageParticipatedFunding", myPageController.mypageParticipatedFunding);
 
+  
 module.exports = router;

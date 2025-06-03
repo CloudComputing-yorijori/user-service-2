@@ -18,7 +18,7 @@ multerGoogleStorage = require('multer-google-storage'),
 cors = require('cors');
 
 app.use(cors({
-  origin: ['https://user.yorijori.com', 'https://funding.yorijori.com'],
+  origin: ['https://yorijori.com'],
   credentials: true
 }));
     
@@ -54,7 +54,6 @@ app.use('/uploadprofile', express.static(path.join(__dirname, 'uploadprofile')))
 // 뷰 엔진 설정
 app.set('view engine', 'ejs');
 app.use(layouts);
-app.use(express.static('public')); // 정적 파일 사용
 
 app.use(flash());
 
@@ -120,6 +119,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
+app.use("/css", express.static(path.join(__dirname, "public/css")));
 
 const authRouter = require("./routers/authRouter");
 // 로그인 및 사용자 관리 접근

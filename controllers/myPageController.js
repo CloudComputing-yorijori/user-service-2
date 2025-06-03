@@ -129,9 +129,8 @@ mypageMyFunding: async (req, res) => {
     try {
         let userId = res.locals.currentUser.getDataValue('userId');
 
-        const response = await axios.get("http://34.64.101.191/funding/opened", {
+        const response = await axios.get("http://funding-service:3001/funding/opened", {
             headers: {
-              Host: 'funding.yorijori.com',
               Cookie: req.headers.cookie
             },
             timeout: 5000 // 5초 안에 응답 없으면 오류 발생
@@ -182,9 +181,8 @@ mypageMyFunding: async (req, res) => {
             let userId = res.locals.currentUser.getDataValue('userId');
             
             // 공동구매 서비스에 요청
-            const response = await axios.get("http://34.64.101.191/funding/participated", {
+            const response = await axios.get("http://funding-service:3001/funding/participated", {
                 headers: {
-                    Host: 'funding.yorijori.com', // 👈 Host 헤더 설정
                     Cookie: req.headers.cookie
                 }
             });
