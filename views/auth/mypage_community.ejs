@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>요리조리_마이페이지</title>
+    <link rel="stylesheet" href="/css/auth/mypage_main.css">
+</head>
+<body>
+    <div class="container">
+        <div class="inincontainer">
+            <div class="mypage-main">마이페이지 > 커뮤니티 활동</div>
+            <div class="incontainer">
+                <div class="menu-bar">
+                    <div class="menu-bar-option"><a href="/auth/mypage">나의 레시피</a></div>
+                    <div class="menu-bar-option"><a href="/auth/mypageComment">댓글</a></div>
+                    <div class="menu-bar-option"><a href="/auth/mypageScrap">스크랩</a></div>
+                    <hr class="custom-hr">
+                    <div class="menu-bar-option"><p>펀딩</p></div>
+                    <div class="menu-bar-option"><a href="/auth/mypageMyFunding">내가 연 펀딩</a></div>
+                    <div class="menu-bar-option"><a href="/auth/mypageParticipatedFunding">내가 참여한 펀딩</a></div>
+                    <hr class="custom-hr">
+                    <div class="myprofile">
+                        <div class="profileimage">
+                            <img src="<%= result.imageUrl %>" alt="profileImage" class="img">
+                        </div>
+                        <div class="Nickname"><%= result.nickname %></div>
+                        <div class="buttonbox"><button class="btn-block" type="button" onclick="showPopup()">편집</button></div>
+                        <div class="buttonbox"><a href="/auth/logout"><button class="btn-block" type="button">로그아웃</button></a></div>
+                    </div>
+                </div>
+
+                <div class="mainbox">
+                    <h2>📌 내가 쓴 글</h2>
+                    <% if (posts.length > 0) { %>
+                        <% posts.forEach(post => { %>
+                            <a href="/write/getWritedPage?postId=<%= post.postId %>">
+                                <div class="mypost">
+                                    <h3><%= post.title %></h3>
+                                    <p><%= post.createdAt %></p>
+                                    <p><%= post.content %></p>
+                                </div>
+                            </a>
+                        <% }) %>
+                    <% } else { %>
+                        <p>작성한 글이 없습니다.</p>
+                    <% } %>
+
+                    <h2>💬 내가 단 댓글</h2>
+                    <% if (comments.length > 0) { %>
+                        <% comments.forEach(comment => { %>
+                            <div class="mypost">
+                                <p><strong>게시글:</strong> <%= comment.postTitle %></p>
+                                <p><%= comment.content %></p>
+                                <p><%= comment.createdAt %></p>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p>작성한 댓글이 없습니다.</p>
+                    <% } %>
+
+                    <h2>📎 스크랩한 글</h2>
+                    <% if (scraps.length > 0) { %>
+                        <% scraps.forEach(scrap => { %>
+                            <a href="/write/getWritedPage?postId=<%= scrap.postId %>">
+                                <div class="mypost">
+                                    <h3><%= scrap.title %></h3>
+                                    <p><%= scrap.createdAt %></p>
+                                </div>
+                            </a>
+                        <% }) %>
+                    <% } else { %>
+                        <p>스크랩한 글이 없습니다.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 팝업 배경 -->
+    <div class="popup-bg" id="popup-bg" onclick="closePopup()"></div>
+
+    <!-- 팝업 내용 -->
+    <div class="popup" id="popup">
+        <h2>프로필 편집</h2>
+        <form class="form-signin" action="/auth/<%= userId %>/update" method="POST" enctype="multipart/form-data">
+            <div class="profileimage2">
+                <img src="<%= result.imageUrl %>" alt="profileImage" class="img">
+            </div>
+            <div class="input-container">
+                <input type="text" name="nickname" class="form-control" placeholder="변경할 닉네임" required>
+            </div>
+            <div class="input-container-three">
+                <input type="text" name="city" class="form-control2" placeholder="시도">
+                <input type="text" name="district" class="form-control2" placeholder="시군구">
+                <input type="text" name="town" class="form-control2" placeholder="읍면동">
+            </div>
+            <div class="input-container">
+                <input type="text" name="detail" class="form-control" placeholder="상세주소" required>
+            </div>
+            <div class="input-container">
+                <input type="file" name="profileImage" class="form-control">
+            </div>
+            <button type="button" onclick="closePopup()" id="popupButton">취소</button>
+            <button type="submit" id="popupButton">저장</button>
+        </form>
+    </div>
+
+    <script>
+        function showPopup() {
+            document.getElementById('popup').style.display = 'block';
+            document.getElementById('popup-bg').style.display = 'block';
+        }
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('popup-bg').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

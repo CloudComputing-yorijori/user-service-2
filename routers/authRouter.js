@@ -26,6 +26,8 @@ router.get("/mypageScrap", myPageController.mypageScrap);
 router.get("/mypageComment", myPageController.mypageComment);
 router.get("/myPageMyFunding", myPageController.mypageMyFunding);
 router.get("/mypageParticipatedFunding", myPageController.mypageParticipatedFunding);
+router.get("/mypageCommunity", myPageController.mypageCommunity);
+
 
   
 module.exports = router;
