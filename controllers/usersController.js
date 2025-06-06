@@ -45,10 +45,15 @@ module.exports = {
             // 세션에 유저 정보 저장
             req.session.user = {
                 userId: user.userId,
+                email: user.email,
+                name: user.name,
                 nickname: user.nickname,
-                imageUrl: user.imageUrl,
                 phoneNumber: user.phoneNumber,
-                district: user.district
+                city: user.city,
+                district: user.district,
+                town: user.town,
+                detail: user.detail,
+                imageUrl: user.imageUrl
               };
             
     

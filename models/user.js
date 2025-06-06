@@ -55,6 +55,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false
       },
+      district: { // 시군구
+        type: DataTypes.STRING,
+        allowNull: false
+      },
       town: {
         type: DataTypes.STRING,
         allowNull: false
